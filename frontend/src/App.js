@@ -16,7 +16,9 @@ class App extends Component {
     this.changeAudioName = this.changeAudioName.bind(this)
     this.toggleRecording = this.toggleRecording.bind(this)
     this.onSaveSound = this.onSaveSound.bind(this)
-    this.onPlaySound = this.onPlaySound.bind(this)
+    this.onPlayBlob = this.onPlayBlob.bind(this)
+
+    this.audioPlayer = null
   }
 
   onNewAudioBlob(blob) { this.setState({ blob: blob }) }
@@ -30,9 +32,11 @@ class App extends Component {
     console.log('I tried to save, but it not do yet.')
   }
 
-  onPlaySound() {
-    // TODO: Marten make the play thingy
-    console.log('I tried to play, but it not do yet.')
+  onPlayBlob(blob) {
+    const audio = new Audio(blob && window.URL.createObjectURL(blob))
+    audio.play()
+    audio.onplay = () => this.setState({ playing: true })
+    audio.onended = () => this.setState({ playing: false })
   }
 
   render() {
@@ -55,10 +59,9 @@ class App extends Component {
             toggleRecording={this.toggleRecording}
             recording={recording}
             onSaveSound={this.onSaveSound}
-            onPlaySound={this.onPlaySound}
+            onPlaySound={() => this.onPlayBlob(this.state.blob)}
             playing={playing}
           />
-          <audio controls src={blob && window.URL.createObjectURL(blob)} type="audio/webm" />
         </div>
       </div>
     )
