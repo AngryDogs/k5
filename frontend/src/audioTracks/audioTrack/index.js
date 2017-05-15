@@ -7,11 +7,17 @@ export default ({ audioTrack, playBlob, playing }) => {
       {
         audioTrack.blob && (
           <button
-            className={`ml-2 btn btn-${ playing ? 'danger' : 'success' }`}
+            className={`ml-2 btn p-2 btn-outline-${ playing ? 'danger' : 'success' }`}
             disabled={playing}
             onClick={() => playBlob(audioTrack.blob)}
           >
-            { playing ? 'playing...' : 'play' }
+            {
+              playing ? (
+                <i className="fa fa-pause fa-2x" style={{ width: '32px', height: '32px' }}></i>
+              ) : (
+                <i className="fa fa-play fa-2x" style={{ width: '32px', height: '32px' }}></i>
+              )
+            }
           </button>
         )
       }
