@@ -69,7 +69,7 @@ class App extends Component {
   }
 
   onCancel() {
-    this.setState({ playing: false, recording: false, blob: null })
+    this.setState({ playing: false, recording: false, blob: null, newAudioName: '' })
   }
 
   playBlob(blob) {
@@ -85,7 +85,12 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <div style={{ position: 'absolute', top: '35px', left: 0, width: '100%', opacity: 0.5 }}>
+            <i className="text-success fa px-2 fa-eur fa-5x"></i>
+            <i className="text-info fa px-2 fa-dollar fa-5x"></i>
+            <i className="text-danger fa px-2 fa-jpy fa-5x"></i>
+          </div>
+          <i className="App-logo fa fa-music fa-5x"></i>
           <h2>Welcome to <span className="text-success">audimoosoundsonline</span>.biz.gov.uk.ru.mobi</h2>
         </div>
         <div className="App-intro d-flex justify-content-center">
@@ -93,6 +98,7 @@ class App extends Component {
           <h3 className="text-primary px-3 pt-3 pb-2">record it!</h3>
           <h3 className="text-info px-3 pt-3 pb-2">save it!</h3>
         </div>
+
         <div className="container">
           <div className="input-container pb-3">
             <AudioInput

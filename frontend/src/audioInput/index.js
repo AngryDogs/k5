@@ -54,44 +54,61 @@ export default ({
           type="text"
           value={audioName}
           placeholder="audiotrack's name..."
+          autoFocus
           onChange={event => changeAudioName(event.target.value)}
         />
-        <button
-          className={`ml-2 btn btn-${recording ? 'danger' : 'primary'}`}
-          onClick={startStop}
-        >
-          { recording ? 'stop' : 'record' }
-        </button>
+        {
+          !blob && (
+            <button
+              className={`ml-2 btn p-2 btn-outline-${recording ? 'danger' : 'primary'}`}
+              onClick={startStop}
+            >
+              {
+                recording ? (
+                  <i className="fa fa-microphone-slash fa-2x" style={{ width: '32px', height: '32px' }}></i>
+                ) : (
+                  <i className="fa fa-microphone fa-2x" style={{ width: '32px', height: '32px' }}></i>
+                )
+              }
+            </button>
+          )
+        }
         {
           blob && (
             <button
-              className={`ml-2 btn btn-${ playing ? 'danger' : 'success' }`}
+              className={`ml-2 btn p-2 btn-outline-${ playing ? 'danger' : 'success' }`}
               disabled={playing}
               onClick={() => onPlaySound(blob)}
             >
-              { playing ? 'playing...' : 'play' }
+              {
+                playing ? (
+                  <i className="fa fa-pause fa-2x" style={{ width: '32px', height: '32px' }}></i>
+                ) : (
+                  <i className="fa fa-play fa-2x" style={{ width: '32px', height: '32px' }}></i>
+                )
+              }
             </button>
           )
         }
         {
           blob && (
             <button
-              className={`ml-2 btn btn-info`}
+              className={`ml-2 btn p-2 btn-outline-info`}
               disabled={playing}
               onClick={onSaveSound}
             >
-              save
+              <i className="fa fa-save fa-2x" style={{ width: '32px', height: '32px' }}></i>
             </button>
           )
         }
         {
           blob && (
             <button
-              className={`ml-2 btn btn-danger`}
+              className={`ml-2 btn p-2 btn-outline-danger`}
               disabled={playing}
               onClick={onCancel}
             >
-              cancel
+              <i className="fa fa-close fa-2x" style={{ width: '32px', height: '32px' }}></i>
             </button>
           )
         }
