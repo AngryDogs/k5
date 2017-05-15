@@ -66,6 +66,7 @@ export default ({
           blob && (
             <button
               className={`ml-2 btn btn-${ playing ? 'danger' : 'success' }`}
+              disabled={playing}
               onClick={() => onPlaySound(blob)}
             >
               { playing ? 'playing...' : 'play' }
@@ -76,6 +77,7 @@ export default ({
           blob && (
             <button
               className={`ml-2 btn btn-info`}
+              disabled={playing}
               onClick={onSaveSound}
             >
               save
@@ -86,6 +88,7 @@ export default ({
           blob && (
             <button
               className={`ml-2 btn btn-danger`}
+              disabled={playing}
               onClick={onCancel}
             >
               cancel
