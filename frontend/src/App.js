@@ -17,6 +17,7 @@ class App extends Component {
     this.toggleRecording = this.toggleRecording.bind(this)
     this.onSaveSound = this.onSaveSound.bind(this)
     this.onPlayBlob = this.onPlayBlob.bind(this)
+    this.onCancel = this.onCancel.bind(this)
 
     this.audioPlayer = null
   }
@@ -32,6 +33,10 @@ class App extends Component {
     console.log('I tried to save, but it not do yet.')
   }
 
+  onCancel() {
+    this.setState({ playing: false, recording: false, blob: null })
+  }
+
   onPlayBlob(blob) {
     const audio = new Audio(blob && window.URL.createObjectURL(blob))
     audio.play()
@@ -41,26 +46,29 @@ class App extends Component {
 
   render() {
     const { blob, newAudioName, recording, playing } = this.state
-    console.log(this.state)
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>Welcome to <span className="text-success">audimoosoundsonline</span>.biz.gov.uk.ru.mobi</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <div className="App-intro d-flex justify-content-center">
+          <h3 className="text-success px-3 pt-3">type it!</h3>
+          <h3 className="text-primary px-3 pt-3">record it!</h3>
+          <h3 className="text-info px-3 pt-3">save it!</h3>
+        </div>
         <div className="container">
           <AudioInput
+            blob={this.state.blob}
             onNewAudioBlob={this.onNewAudioBlob}
             audioName={newAudioName}
             changeAudioName={this.changeAudioName}
             toggleRecording={this.toggleRecording}
             recording={recording}
             onSaveSound={this.onSaveSound}
-            onPlaySound={() => this.onPlayBlob(this.state.blob)}
+            onPlaySound={this.onPlayBlob}
             playing={playing}
+            onCancel={this.onCancel}
           />
         </div>
       </div>

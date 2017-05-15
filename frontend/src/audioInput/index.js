@@ -17,6 +17,8 @@ export default ({
   onSaveSound,
   onPlaySound,
   playing,
+  blob,
+  onCancel,
 }) => {
   const startRecording = () => {
     navigator
@@ -43,7 +45,6 @@ export default ({
       startRecording()
     }
   }
-  console.log(recordRTC)
   return (
     <div>
       <div className="d-flex">
@@ -52,6 +53,7 @@ export default ({
           style={{ flex: 1 }}
           type="text"
           value={audioName}
+          placeholder="audiotrack's name..."
           onChange={event => changeAudioName(event.target.value)}
         />
         <button
@@ -60,18 +62,36 @@ export default ({
         >
           { recording ? 'stop' : 'record' }
         </button>
-        <button
-          className={`ml-2 btn btn-success`}
-          onClick={onPlaySound}
-        >
-          { playing ? 'playing...' : 'play' }
-        </button>
-        <button
-          className={`ml-2 btn btn-info`}
-          onClick={onSaveSound}
-        >
-          save
-        </button>
+        {
+          blob && (
+            <button
+              className={`ml-2 btn btn-${ playing ? 'danger' : 'success' }`}
+              onClick={() => onPlaySound(blob)}
+            >
+              { playing ? 'playing...' : 'play' }
+            </button>
+          )
+        }
+        {
+          blob && (
+            <button
+              className={`ml-2 btn btn-info`}
+              onClick={onSaveSound}
+            >
+              save
+            </button>
+          )
+        }
+        {
+          blob && (
+            <button
+              className={`ml-2 btn btn-danger`}
+              onClick={onCancel}
+            >
+              cancel
+            </button>
+          )
+        }
       </div>
     </div>
   )
