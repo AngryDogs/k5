@@ -5,6 +5,10 @@ import './App.css'
 import AudioInput from './audioInput'
 import AudioTracks from './audioTracks'
 
+const headers = {
+  'Content-Type': 'application/json',
+}
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -13,6 +17,7 @@ class App extends Component {
       newAudioName: '',
       recording: false,
       playing: false,
+      audioTracks: [],
     }
     this.onNewAudioBlob = this.onNewAudioBlob.bind(this)
     this.changeAudioName = this.changeAudioName.bind(this)
@@ -21,7 +26,36 @@ class App extends Component {
     this.playBlob = this.playBlob.bind(this)
     this.onCancel = this.onCancel.bind(this)
 
+    this.addData = this.addData.bind(this)
+    this.fetchAllData = this.fetchAllData.bind(this)
+
     this.audioPlayer = null
+
+    this.fetchAllData();
+  }
+
+  fetchAllData() {
+    fetch("http://localhost:1335/all").then(res => {
+      return res.json();
+    }).then(res => {
+      this.setState({
+        audioTracks: res,
+      });
+    });
+  }
+
+  addData() {
+    const { newAudioName, blob } = this.state;
+    console.log(JSON.stringify(blob));
+    fetch("http://localhost:1335/add", {
+      headers,
+      method: 'POST',
+      body: JSON.stringify({
+        newAudioName, blob
+      })
+    }).then(res => {
+      this.fetchAllData();
+    });
   }
 
   onNewAudioBlob(blob) { this.setState({ blob: blob }) }
@@ -31,8 +65,7 @@ class App extends Component {
   toggleRecording(audioName) { this.setState({ recording: !this.state.recording }) }
 
   onSaveSound() {
-    // TODO: Rain put stuff in mongu
-    console.log('I tried to save, but it not do yet.')
+    this.addData();
   }
 
   onCancel() {
@@ -47,13 +80,8 @@ class App extends Component {
   }
 
   render() {
-    const { blob, newAudioName, recording, playing } = this.state
-    const mockTracks = [
-      { name: '1yolo2', blob },
-      { name: '2yolo3', blob },
-      { name: '3yolo4', blob },
-      { name: '4yolo5', blob },
-    ]
+    const { blob, newAudioName, recording, playing, audioTracks } = this.state
+
     return (
       <div className="App">
         <div className="App-header">
@@ -83,7 +111,7 @@ class App extends Component {
           <div className="tracks-container">
             <AudioTracks
               audioTracks={
-                mockTracks
+                audioTracks
                   .filter(track => track.name.toLowerCase().includes(newAudioName.toLowerCase()))
               }
               playBlob={this.playBlob}
