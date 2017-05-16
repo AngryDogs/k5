@@ -41,7 +41,7 @@ app.get('/public/uploads/:name', function (req, res, next) {
 });
 
 app.post('/add', upload.single('blob'), function (req, res) {
-  connectToAdd(req.file.originalname, req.file);
+  connectToAdd(req.file.originalname.toLowerCase(), req.file);
   res.send("Inserted");
 });
 
