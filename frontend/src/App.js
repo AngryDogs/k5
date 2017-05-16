@@ -5,10 +5,6 @@ import './App.css'
 import AudioInput from './audioInput'
 import AudioTracks from './audioTracks'
 
-const headers = {
-  'Content-Type': 'application/json',
-}
-
 class App extends Component {
   constructor(props) {
     super(props)
@@ -30,7 +26,9 @@ class App extends Component {
     this.fetchAllData = this.fetchAllData.bind(this)
 
     this.audioPlayer = null
+  }
 
+  componentDidMount() {
     this.fetchAllData();
   }
 
@@ -46,14 +44,14 @@ class App extends Component {
 
   addData() {
     const { newAudioName, blob } = this.state;
-    console.log(JSON.stringify(blob));
+    let fd = new FormData()
+    fd.append('blob', blob, newAudioName);
+
     fetch("http://localhost:1335/add", {
-      headers,
       method: 'POST',
-      body: JSON.stringify({
-        newAudioName, blob
-      })
+      body: fd,
     }).then(res => {
+      this.setState({ playing: false, recording: false, blob: null, newAudioName: '' })
       this.fetchAllData();
     });
   }
@@ -81,7 +79,8 @@ class App extends Component {
 
   render() {
     const { blob, newAudioName, recording, playing, audioTracks } = this.state
-
+    const filteredAudioTracks = audioTracks
+      .filter(track => track.name && track.name.toLowerCase().includes(newAudioName.toLowerCase()))
     return (
       <div className="App">
         <div className="App-header">
@@ -114,12 +113,20 @@ class App extends Component {
               onCancel={this.onCancel}
             />
           </div>
+          {
+            (blob && filteredAudioTracks.filter(track => track.name.toLowerCase() === newAudioName.toLowerCase()).length) ? (
+              <div className="pb-2">
+                <h2>
+                  <span className="text-warning">
+                    Saving this sound will overwrite an existing sound
+                  </span>
+                </h2>
+              </div>
+            ) : ''
+          }
           <div className="tracks-container">
             <AudioTracks
-              audioTracks={
-                audioTracks
-                  .filter(track => track.name.toLowerCase().includes(newAudioName.toLowerCase()))
-              }
+              audioTracks={filteredAudioTracks}
               playBlob={this.playBlob}
               playing={playing}
             />

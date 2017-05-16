@@ -53,7 +53,7 @@ export default ({
           style={{ flex: 1 }}
           type="text"
           value={audioName}
-          placeholder="audiotrack's name..."
+          placeholder="new audiotrack's name or filter..."
           autoFocus
           onChange={event => changeAudioName(event.target.value)}
         />

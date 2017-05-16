@@ -9,7 +9,13 @@ export default ({ audioTrack, playBlob, playing }) => {
           <button
             className={`ml-2 btn p-2 btn-outline-${ playing ? 'danger' : 'success' }`}
             disabled={playing}
-            onClick={() => playBlob(audioTrack.blob)}
+            onClick={() => {
+              fetch(`http://localhost:1335/${audioTrack.blob.path}`, {
+                method: 'GET',
+              })
+              .then(response => response.blob())
+              .then(res => playBlob(res))
+            }}
           >
             {
               playing ? (
